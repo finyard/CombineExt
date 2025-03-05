@@ -1,5 +1,5 @@
 //
-//  WithLatestFrom.swift
+//  WithLatestFromThreadunsafe.swift
 //  CombineExt
 //
 //  Created by Shai Mishali on 29/08/2019.
@@ -22,9 +22,9 @@ public extension Publisher {
   ///  - returns: A publisher containing the result of combining each value of the self
   ///             with the latest value from the second publisher, if any, using the
   ///             specified result selector function.
-  func withLatestFrom<Other: Publisher, Result>(_ other: Other,
+  func withLatestFromThreadunsafe<Other: Publisher, Result>(_ other: Other,
                                                 resultSelector: @escaping (Output, Other.Output) -> Result)
-    -> Publishers.WithLatestFrom<Self, Other, Result> {
+    -> Publishers.WithLatestFromThreadunsafe<Self, Other, Result> {
       return .init(upstream: self, second: other, resultSelector: resultSelector)
   }
 
@@ -39,10 +39,10 @@ public extension Publisher {
   ///  - returns: A publisher containing the result of combining each value of the self
   ///             with the latest value from the second and third publisher, if any, using the
   ///             specified result selector function.
-  func withLatestFrom<Other: Publisher, Other1: Publisher, Result>(_ other: Other,
+  func withLatestFromThreadunsafe<Other: Publisher, Other1: Publisher, Result>(_ other: Other,
                                                                    _ other1: Other1,
                                                                    resultSelector: @escaping (Output, (Other.Output, Other1.Output)) -> Result)
-    -> Publishers.WithLatestFrom<Self, AnyPublisher<(Other.Output, Other1.Output), Self.Failure>, Result>
+    -> Publishers.WithLatestFromThreadunsafe<Self, AnyPublisher<(Other.Output, Other1.Output), Self.Failure>, Result>
     where Other.Failure == Failure, Other1.Failure == Failure {
       let combined = other.combineLatest(other1)
         .eraseToAnyPublisher()
@@ -61,11 +61,11 @@ public extension Publisher {
   ///  - returns: A publisher containing the result of combining each value of the self
   ///             with the latest value from the second, third and fourth publisher, if any, using the
   ///             specified result selector function.
-  func withLatestFrom<Other: Publisher, Other1: Publisher, Other2: Publisher, Result>(_ other: Other,
+  func withLatestFromThreadunsafe<Other: Publisher, Other1: Publisher, Other2: Publisher, Result>(_ other: Other,
                                                                                       _ other1: Other1,
                                                                                       _ other2: Other2,
                                                                                       resultSelector: @escaping (Output, (Other.Output, Other1.Output, Other2.Output)) -> Result)
-    -> Publishers.WithLatestFrom<Self, AnyPublisher<(Other.Output, Other1.Output, Other2.Output), Self.Failure>, Result>
+    -> Publishers.WithLatestFromThreadunsafe<Self, AnyPublisher<(Other.Output, Other1.Output, Other2.Output), Self.Failure>, Result>
     where Other.Failure == Failure, Other1.Failure == Failure, Other2.Failure == Failure {
       let combined = other.combineLatest(other1, other2)
         .eraseToAnyPublisher()
@@ -78,8 +78,8 @@ public extension Publisher {
   ///  - parameter other: A second publisher source.
   ///
   ///  - returns: A publisher containing the latest value from the second publisher, if any.
-  func withLatestFrom<Other: Publisher>(_ other: Other)
-    -> Publishers.WithLatestFrom<Self, Other, Other.Output> {
+  func withLatestFromThreadunsafe<Other: Publisher>(_ other: Other)
+    -> Publishers.WithLatestFromThreadunsafe<Self, Other, Other.Output> {
       return .init(upstream: self, second: other) { $1 }
   }
 
@@ -90,11 +90,11 @@ public extension Publisher {
   /// - parameter other1: A third publisher source.
   ///
   /// - returns: A publisher containing the latest value from the second and third publisher, if any.
-  func withLatestFrom<Other: Publisher, Other1: Publisher>(_ other: Other,
+  func withLatestFromThreadunsafe<Other: Publisher, Other1: Publisher>(_ other: Other,
                                                            _ other1: Other1)
-    -> Publishers.WithLatestFrom<Self, AnyPublisher<(Other.Output, Other1.Output), Self.Failure>, (Other.Output, Other1.Output)>
+    -> Publishers.WithLatestFromThreadunsafe<Self, AnyPublisher<(Other.Output, Other1.Output), Self.Failure>, (Other.Output, Other1.Output)>
     where Other.Failure == Failure, Other1.Failure == Failure {
-     withLatestFrom(other, other1) { $1 }
+     withLatestFromThreadunsafe(other, other1) { $1 }
   }
 
   /// Upon an emission from self, emit the latest value from the
@@ -105,19 +105,19 @@ public extension Publisher {
   /// - parameter other2: A forth publisher source.
   ///
   /// - returns: A publisher containing the latest value from the second, third and forth publisher, if any.
-  func withLatestFrom<Other: Publisher, Other1: Publisher, Other2: Publisher>(_ other: Other,
+  func withLatestFromThreadunsafe<Other: Publisher, Other1: Publisher, Other2: Publisher>(_ other: Other,
                                                                               _ other1: Other1,
                                                                               _ other2: Other2)
-    -> Publishers.WithLatestFrom<Self, AnyPublisher<(Other.Output, Other1.Output, Other2.Output), Self.Failure>, (Other.Output, Other1.Output, Other2.Output)>
+    -> Publishers.WithLatestFromThreadunsafe<Self, AnyPublisher<(Other.Output, Other1.Output, Other2.Output), Self.Failure>, (Other.Output, Other1.Output, Other2.Output)>
     where Other.Failure == Failure, Other1.Failure == Failure, Other2.Failure == Failure {
-     withLatestFrom(other, other1, other2) { $1 }
+     withLatestFromThreadunsafe(other, other1, other2) { $1 }
   }
 }
 
 // MARK: - Publisher
 @available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 public extension Publishers {
-  struct WithLatestFrom<Upstream: Publisher,
+  struct WithLatestFromThreadunsafe<Upstream: Publisher,
                         Other: Publisher,
                         Output>: Publisher where Upstream.Failure == Other.Failure {
     public typealias Failure = Upstream.Failure
@@ -147,7 +147,7 @@ public extension Publishers {
 
 // MARK: - Subscription
 @available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-private extension Publishers.WithLatestFrom {
+private extension Publishers.WithLatestFromThreadunsafe {
   class Subscription<Downstream: Subscriber>: Combine.Subscription, CustomStringConvertible where Downstream.Input == Output, Downstream.Failure == Failure {
     private let resultSelector: ResultSelector
     private var sink: Sink<Upstream, Downstream>?
@@ -226,7 +226,7 @@ private extension Publishers.WithLatestFrom {
     }
 
     var description: String {
-        return "WithLatestFrom.Subscription<\(Output.self), \(Failure.self)>"
+        return "WithLatestFromThreadunsafe.Subscription<\(Output.self), \(Failure.self)>"
     }
 
     func cancel() {

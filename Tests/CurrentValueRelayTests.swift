@@ -132,7 +132,7 @@ class CurrentValueRelayTests: XCTestCase {
     // released regardless of when cancellables is initialized.
     //
     // The last two tests check the scenario where a relay is
-    // chained with a withLatestFrom operator. This leads
+    // chained with a withLatestFromThreadunsafe operator. This leads
     // to two objects being leaked if cancellables is initialized
     // before the relays.
     final class StoredObject {
@@ -254,7 +254,7 @@ class CurrentValueRelayTests: XCTestCase {
             
             init() {
                 relay
-                    .withLatestFrom(relay2)
+                    .withLatestFromThreadunsafe(relay2)
                     .handleEvents(receiveCancel: {
                         Self.receivedCancel = true
                     })
@@ -296,7 +296,7 @@ class CurrentValueRelayTests: XCTestCase {
             
             init() {
                 relay
-                    .withLatestFrom(relay2)
+                    .withLatestFromThreadunsafe(relay2)
                     .handleEvents(receiveCancel: {
                         Self.receivedCancel = true
                     })

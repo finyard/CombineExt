@@ -45,7 +45,7 @@ class Sink<Upstream: Publisher, Downstream: Subscriber>: Subscriber {
         
         // A subscription can only be cancelled once. The `upstreamIsCancelled` value
         // is used to suppress a second call to cancel when the Sink is deallocated,
-        // when a sink receives completion, and when a custom operator like `withLatestFrom`
+        // when a sink receives completion, and when a custom operator like `withLatestFromThreadunsafe`
         // calls `cancelUpstream()` manually.
         upstream
             .handleEvents(

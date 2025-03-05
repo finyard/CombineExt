@@ -1,5 +1,5 @@
 //
-//  WithLatestFrom.swift
+//  WithLatestFromThreadunsafe.swift
 //  CombineExtTests
 //
 //  Created by Shai Mishali on 24/10/2019.

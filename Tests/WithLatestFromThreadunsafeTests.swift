@@ -1,5 +1,5 @@
 //
-//  WithLatestFrom.swift
+//  WithLatestFromThreadunsafe.swift
 //  CombineExtTests
 //
 //  Created by Shai Mishali on 24/10/2019.
@@ -21,7 +21,7 @@ class WithLatestFromTests: XCTestCase {
         var completed = false
         
         subscription = subject1
-            .withLatestFrom(subject2) { "\($0)\($1)" }
+            .withLatestFromThreadunsafe(subject2) { "\($0)\($1)" }
             .sink(receiveCompletion: { _ in completed  = true },
                   receiveValue: { results.append($0) })
         
@@ -74,7 +74,7 @@ class WithLatestFromTests: XCTestCase {
         )
         
         subject1
-            .withLatestFrom(subject2) { "\($0)\($1)" }
+            .withLatestFromThreadunsafe(subject2) { "\($0)\($1)" }
             .subscribe(subscriber)
         
         subject1.send(1)
@@ -108,7 +108,7 @@ class WithLatestFromTests: XCTestCase {
         var results = [String]()
         
         subscription = subject1?
-            .withLatestFrom(subject2!) { "\($0)\($1)" }
+            .withLatestFromThreadunsafe(subject2!) { "\($0)\($1)" }
             .sink(receiveCompletion: { _ in },
                   receiveValue: { results.append($0) })
         
@@ -135,7 +135,7 @@ class WithLatestFromTests: XCTestCase {
         var results = [String]()
         
         subscription = upstream?
-            .withLatestFrom(other!) { "\($0)\($1)" }
+            .withLatestFromThreadunsafe(other!) { "\($0)\($1)" }
             .sink(receiveCompletion: { _ in },
                   receiveValue: { results.append($0) })
         
@@ -155,7 +155,7 @@ class WithLatestFromTests: XCTestCase {
         var completed = false
         
         subscription = subject1
-          .withLatestFrom(subject2)
+          .withLatestFromThreadunsafe(subject2)
             .sink(receiveCompletion: { _ in completed  = true },
                   receiveValue: { results.append($0) })
         
@@ -196,7 +196,7 @@ class WithLatestFromTests: XCTestCase {
         var results = [String]()
         
         subscription = subject1?
-            .withLatestFrom(subject2!)
+            .withLatestFromThreadunsafe(subject2!)
             .sink(receiveCompletion: { _ in },
                   receiveValue: { results.append($0) })
         
@@ -221,7 +221,7 @@ class WithLatestFromTests: XCTestCase {
         var completed = false
 
         subscription = subject1
-          .withLatestFrom(subject2, subject3) { "\($0)|\($1.0)|\($1.1)" }
+          .withLatestFromThreadunsafe(subject2, subject3) { "\($0)|\($1.0)|\($1.1)" }
             .sink(
                 receiveCompletion: { _ in completed  = true },
                 receiveValue: { results.append($0) }
@@ -279,7 +279,7 @@ class WithLatestFromTests: XCTestCase {
         var results = [String]()
         
         subscription = subject1?
-            .withLatestFrom(subject2!, subject3!) { "\($0)|\($1.0)|\($1.1)" }
+            .withLatestFromThreadunsafe(subject2!, subject3!) { "\($0)|\($1.0)|\($1.1)" }
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { results.append($0) }
@@ -314,7 +314,7 @@ class WithLatestFromTests: XCTestCase {
       var completed = false
 
       subscription = subject1
-        .withLatestFrom(subject2, subject3)
+        .withLatestFromThreadunsafe(subject2, subject3)
           .sink(
               receiveCompletion: { _ in completed  = true },
               receiveValue: { results.append(Result(string: $0.0, boolean: $0.1)) }
@@ -372,7 +372,7 @@ class WithLatestFromTests: XCTestCase {
         var results = [String]()
         
         subscription = subject1?
-            .withLatestFrom(subject2!, subject3!)
+            .withLatestFromThreadunsafe(subject2!, subject3!)
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { results.append("\($0.0)|\($0.1)") }
@@ -404,7 +404,7 @@ class WithLatestFromTests: XCTestCase {
       var completed = false
 
       subscription = subject1
-        .withLatestFrom(subject2, subject3, subject4) { "\($0)|\($1.0)|\($1.1)|\($1.2)" }
+        .withLatestFromThreadunsafe(subject2, subject3, subject4) { "\($0)|\($1.0)|\($1.1)|\($1.2)" }
           .sink(
               receiveCompletion: { _ in completed  = true },
               receiveValue: { results.append($0) }
@@ -470,7 +470,7 @@ class WithLatestFromTests: XCTestCase {
         var results = [String]()
         
         subscription = subject1?
-            .withLatestFrom(subject2!, subject3!, subject4!) { "\($0)|\($1.0)|\($1.1)|\($1.2)" }
+            .withLatestFromThreadunsafe(subject2!, subject3!, subject4!) { "\($0)|\($1.0)|\($1.1)|\($1.2)" }
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { results.append($0) }
@@ -513,7 +513,7 @@ class WithLatestFromTests: XCTestCase {
       var completed = false
 
       subscription = subject1
-        .withLatestFrom(subject2, subject3, subject4)
+        .withLatestFromThreadunsafe(subject2, subject3, subject4)
           .sink(
               receiveCompletion: { _ in completed  = true },
               receiveValue: { results.append(Result(string: $0.0, boolean: $0.1, integer: $0.2)) }
@@ -579,7 +579,7 @@ class WithLatestFromTests: XCTestCase {
         var results = [String]()
         
         subscription = subject1?
-            .withLatestFrom(subject2!, subject3!, subject4!)
+            .withLatestFromThreadunsafe(subject2!, subject3!, subject4!)
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { results.append("\($0.0)|\($0.1)|\($0.2)") }

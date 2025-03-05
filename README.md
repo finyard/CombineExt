@@ -20,7 +20,7 @@ The original inspiration for many of these additions came from my journey invest
 All operators, utilities and helpers respect Combine's publisher contract, including backpressure.
 
 ### Operators
-* [withLatestFrom](#withLatestFrom)
+* [withLatestFromThreadunsafe](#withLatestFromThreadunsafe)
 * [flatMapLatest](#flatMapLatest)
 * [assign](#assign)
 * [amb and Collection.amb](#amb)
@@ -88,7 +88,7 @@ github "CombineCommunity/CombineExt"
 
 This section outlines some of the custom operators CombineExt provides.
 
-### withLatestFrom
+### withLatestFromThreadunsafe
 
 Merges up to four publishers into a single publisher by combining each value from `self` with the _latest_ value from the other publishers, if any.
 
@@ -97,8 +97,8 @@ let taps = PassthroughSubject<Void, Never>()
 let values = CurrentValueSubject<String, Never>("Hello")
 
 taps
-  .withLatestFrom(values)
-  .sink(receiveValue: { print("withLatestFrom: \($0)") })
+  .withLatestFromThreadunsafe(values)
+  .sink(receiveValue: { print("withLatestFromThreadunsafe: \($0)") })
 
 taps.send()
 taps.send()
@@ -109,9 +109,9 @@ taps.send()
 #### Output:
 
 ```none
-withLatestFrom: Hello
-withLatestFrom: Hello
-withLatestFrom: World!
+withLatestFromThreadunsafe: Hello
+withLatestFromThreadunsafe: Hello
+withLatestFromThreadunsafe: World!
 ```
 
 ------
